@@ -62,6 +62,9 @@ $
 ```
 
 ###### To run the scripts
+* Have two tabs running:
+* (i). `sudo mongod` - runs mongo server
+* (ii), `mongo` - to run the shell
 * use `cat filename | mongo`
 * eg 
 ```
