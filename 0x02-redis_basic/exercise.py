@@ -5,7 +5,7 @@ Contains class Cache
 """
 import redis
 import uuid
-from typing import Union
+from typing import Union, Optional, Callable
 
 
 class Cache:
@@ -23,3 +23,21 @@ class Cache:
         key: uuid.UUID = str(uuid.uuid1())
         self._redis.set(key, data)
         return key
+
+    def get(self, key: str, fn: Optional[Callable]
+            = None) -> Union[str, bytes, int, float]:
+        """
+        convert the data back to the desired format.
+        """
+        data = self._redis.get(key)
+        if fn:
+            data = fn(data)
+        return data
+
+    def get_str(self, data: bytes) -> str:
+        """converts data to str"""
+        return str(data, "utf-8")
+
+    def get_int(self, data: bytes) -> int:
+        """converts data to int"""
+        return int(data, "base=0")
