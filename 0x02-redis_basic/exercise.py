@@ -38,12 +38,32 @@ def count_calls(method: Callable) -> Callable:
     return wrapper
 
 
+def call_history(method):
+    """
+    store the history of inputs and outputs
+    for a particular function
+    """
+    key = method.__qualname__
+    input_key = key + ":inputs"
+    output_key = key + ":outputs"
+
+    @wraps(method)
+    def wrapper(self, *args, **kwds):
+        """use rpush to append the input arguments"""
+        self._redis.rpush(input_key, str(args))
+        data = method(self, *args, **kwds)
+        self._redis.rpush(output_key, str(data))
+        return data
+    return wrapper
+
+
 class Cache:
     def __init__(self) -> None:
         """Initialization"""
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
