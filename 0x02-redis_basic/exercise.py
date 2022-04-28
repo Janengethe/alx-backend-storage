@@ -94,7 +94,7 @@ class Cache:
         return int(data, "base=0")
 
 
-def replay(method: Callable):
+def replay(method: Callable) -> None:
     """ display the history of calls for a function """
     key = method.__qualname__
     inputs = key + ":inputs"
