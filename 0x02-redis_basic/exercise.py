@@ -58,6 +58,7 @@ def call_history(method: Callable) -> Callable:
 
 
 class Cache:
+    """store Redis client information"""
     def __init__(self) -> None:
         """Initialization"""
         self._redis = redis.Redis()
@@ -94,7 +95,7 @@ class Cache:
         return int(data, "base=0")
 
 
-def replay(method: Callable) -> Callable:
+def replay(method: Callable):
     """ display the history of calls for a function """
     key = method.__qualname__
     inputs = key + ":inputs"
